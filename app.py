@@ -8,7 +8,7 @@ from notes import get_notes, create_note, fetch_note, update_note_db, delete_not
 
 app = Flask(__name__)
 
-app.secret_key = "asidojasoidjas"
+app.secret_key = os.getenv("SECRET_KEY")
 
 @app.route("/register")
 def register():
