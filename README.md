@@ -4,7 +4,7 @@ Its a Dockerized notes application made using Flask with user authentication and
 
 Honestly, it was much more fun and interesting than I thought it would be - who would've thought it? Real world projects are much more fun than disappearing down the LeetCode rabbit hole. xd
 
-#Features
+# Features
 
 - User registration
 - Fully secure password hashing
