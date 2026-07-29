@@ -1,0 +1,28 @@
+name: Flask CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: docker build -t flask-notes:v4 .
+
+      - name: Start Containers
+        run: docker compose up -d
+
+      - name: Wait for Flask
+        run: |
+          until curl -f http://localhost:5000; do
+            echo "Waiting for Flask..."
+            sleep 1
+          done
+          echo "Flask is Responding!"
+          

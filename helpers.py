@@ -7,6 +7,17 @@ def login_required(func):
 	def wrapper(*args, **kwargs):
 		if "user_id" not in session:
 			return redirect("/")
-		return fun(*args, **kwargs)
+		return func(*args, **kwargs)
 
 	return wrapper
+
+
+def isEmpty(note):
+
+	note = note.strip()
+	
+	if not note:
+		
+		return True
+
+	return False
