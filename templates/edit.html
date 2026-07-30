@@ -2,7 +2,7 @@
 
 
 {% block content %}
-<form method="POST" action="{{ url_for('update_note', id=row[0]) }}">
+<form method="POST" action="{{ url_for('notes_bp.update_note', id=row[0]) }}">
 
     <input type="text" name="note" value="{{ row[1] }}">
     <button type="submit">Update</button>
