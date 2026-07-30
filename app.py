@@ -6,101 +6,13 @@ from database import conn, cursor
 from users import username_exists, email_exists, create_user
 from notes import get_notes, create_note, fetch_note, update_note_db, delete_note_db
 
+from routes_auth import auth
+
 app = Flask(__name__)
 
 app.secret_key = os.getenv("SECRET_KEY")
 
-@app.route("/register")
-def register():
-
-	return render_template("register.html")
-
-@app.route("/register-user", methods = ["POST"])
-def register_user():
-
-	username = request.form["username"]
-	email = request.form["email"]
-	password = request.form["password"]
-
-
-	if len(username) < 3:
-		flash("Username must be at least 3 characters.")
-		return redirect(url_for("register"))
-
-	if not username.strip():
-		flash("Username is required.")
-		return redirect(url_for("register"))
-
-	if len(password) < 8:
-		flash("Password must be at least 8 characters.")
-		return redirect(url_for("register"))
-
-	password_hash = generate_password_hash(password)
-
-	#CHECK WHETHER USERNAME AND EMAIL EXIST
-
-	if username_exists(username):
-		flash("Username already exists.")
-		return redirect(url_for("register"))
-
-
-	if email_exists(email):
-		flash("An account with this email already exists.")
-		return redirect(url_for("register"))	
-
-	#INSERT USER
-
-	try:
-
-		create_user(username, email, password_hash)
-		flash("User created successfully.")
-		return redirect(url_for("login_page"))
-
-	except Exception as e:
-		print(f"Failed to create user: {e}")
-		raise
-		return redirect(url_for("register"))
-
-
-
-@app.route("/")
-def login_page():
-
-	return render_template("login.html")
-
-
-@app.route("/login", methods = ["POST"])
-def login():
-
-	user = request.form["user"]
-	password = request.form["password"]
-	
-	cursor.execute(
-	"""SELECT id, username, email, password_hash
-	FROM users
-	WHERE username = (%s) OR email = (%s)
-	""", (user, user)
-	)
-
-	account = cursor.fetchone()
-
-	if account is None:
-		flash("This account does not exist")
-		return redirect(url_for("login_page"))
-
-	user_id = account[0]
-	password_hash = account[3]
-
-	if check_password_hash(password_hash, password):
-
-		session["user_id"] = user_id
-
-		flash(f"Welcome, {account[1]}.")
-
-		return redirect("/notes")
-
-	flash("Invalid username/email or password")
-	return redirect(url_for("login_page"))
+app.register_blueprint(auth)
 
 
 @login_required
