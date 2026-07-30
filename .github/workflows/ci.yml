@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - application-factory
 
 jobs:
   build:
