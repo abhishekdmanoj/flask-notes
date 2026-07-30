@@ -99,15 +99,6 @@ def delete_note(id):
 		flash("Failed to delete note.")
 		return redirect(url_for("notes", id=id))
 
-
-@app.route("/logout")
-def logout():
-
-	flash("Logged out successfully")
-	session.pop("user_id", None)
-	session.pop("_flashes", None)
-
-	return redirect("/")
  
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
