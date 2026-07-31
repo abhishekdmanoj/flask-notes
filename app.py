@@ -9,13 +9,21 @@ from notes import get_notes, create_note, fetch_note, update_note_db, delete_not
 from routes_auth import auth
 from routes_notes import notes_bp
 
-app = Flask(__name__)
 
-app.secret_key = os.getenv("SECRET_KEY")
+def create_app():
 
-app.register_blueprint(auth)
+	app = Flask(__name__)
 
-app.register_blueprint(notes_bp)
+	app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+
+	app.register_blueprint(auth)
+
+	app.register_blueprint(notes_bp)
  
+	return app
+
+
+app = create_app()
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
