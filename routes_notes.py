@@ -7,9 +7,8 @@ from notes import get_notes, create_note, fetch_note, update_note_db, delete_not
 notes_bp = Blueprint("notes_bp", __name__)
 
 
-@login_required
 @notes_bp.route("/notes")
-
+@login_required
 def notes():
 
 	if "user_id" not in session:
@@ -20,8 +19,8 @@ def notes():
 	return render_template("home.html", rows = rows)
 
 
-@login_required
 @notes_bp.route("/add-note", methods=["POST"])
+@login_required
 def add_note():
 
 	print("ADD NOTE ROUTE HIT")
@@ -44,8 +43,8 @@ def add_note():
 		raise
 		return redirect(url_for("notes_bp.notes"))
 
-@login_required
 @notes_bp.route("/edit/<int:id>")
+@login_required
 def edit_note(id):
 
 	note = fetch_note(id, session["user_id"])	
@@ -56,8 +55,8 @@ def edit_note(id):
 	return render_template("edit.html", row = note)
 
 
-@login_required
 @notes_bp.route("/edit/<int:id>", methods = ["POST"])
+@login_required
 def update_note(id):
 	
 	note = request.form["note"]
@@ -75,8 +74,8 @@ def update_note(id):
 		flash("Unable to update note.")
 		return redirect(url_for("notes_bp.edit_note", id = id))
 
-@login_required
 @notes_bp.route("/delete/<int:id>")
+@login_required
 def delete_note(id):
 	
 	try:

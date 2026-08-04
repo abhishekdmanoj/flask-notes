@@ -8,13 +8,13 @@ from notes import get_notes, create_note, fetch_note, update_note_db, delete_not
 
 from routes_auth import auth
 from routes_notes import notes_bp
+from config import Config
 
-
-def create_app():
+def create_app(config_class=Config):
 
 	app = Flask(__name__)
 
-	app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+	app.config.from_object(Config)
 
 	app.register_blueprint(auth)
 

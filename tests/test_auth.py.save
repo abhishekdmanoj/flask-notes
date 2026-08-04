@@ -1,0 +1,11 @@
+import pytest
+from app import create_app
+from config import Config
+
+@pytest.fixture
+def app():
+	app = create_app(Config)
+
+	return app
+
+
