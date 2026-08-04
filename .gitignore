@@ -24,3 +24,7 @@ htmlcov/
 # Operating system files
 .DS_Store
 Thumbs.db
+
+# Misc
+*.save
+*.save.*
