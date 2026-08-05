@@ -24,3 +24,9 @@ def create_user(username, email, password_hash):
 	cursor.execute("INSERT INTO users (username, email, password_hash) VALUES (%s, %s, %s)", (username, email, password_hash))
 
 	conn.commit()
+
+def delete_user(username):
+
+	cursor.execute("DELETE FROM users where username = %s", (username, ))
+
+	conn.commit()

@@ -2,7 +2,7 @@ import pytest
 
 from app import create_app
 from config import TestingConfig
-from users import create_user
+from users import create_user, delete_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 @pytest.fixture
@@ -83,14 +83,22 @@ def test_login_no_user_flash(client):
 def test_login_wrong_password(client):
 
 	#ARRANGE
-	password_hash = generate_password_hash("password123")
-	create_user("kira1", "kira1@gmail.com", password_hash)
+	
+	username = "pytest_user"
+	email = "pytest_user@gmail.com"
+	password = "password123"	
+
+	password_hash = generate_password_hash(password)
+
+	delete_user(username)
+
+	create_user(username, email, password_hash)
 
 	#ACT
 	response = client.post(
 	"/login",
 	data = {
-	"user": "kira",
+	"user": username,
 	"password": "wrongpassword"	
 	}
 	)
@@ -99,3 +107,31 @@ def test_login_wrong_password(client):
 	assert response.status_code == 302
 	assert response.headers["Location"] == "/"
 	
+
+def test_login_user(client):
+
+	#ARRANGE
+
+	username = "pytest_user"
+	email = "pytest_user@gmail.com"
+	password = "password123"
+	password_hash = generate_password_hash(password)
+
+	delete_user(username)
+
+	create_user(username, email, password_hash)
+
+	#ACT
+	response = client.post(
+	"/login",
+	data = {
+	"user": username,
+	"password": password
+	},
+	follow_redirects = True
+	)
+
+	#ASSERT
+	assert response.status_code == 200
+	assert b"Welcome, pytest_user" in response.data
+	assert b"Add Note" in response.data
