@@ -2,6 +2,8 @@ import pytest
 
 from app import create_app
 from config import TestingConfig
+from users import create_user
+from werkzeug.security import generate_password_hash, check_password_hash
 
 @pytest.fixture
 def app():
@@ -77,3 +79,23 @@ def test_login_no_user_flash(client):
 
 	assert response.status_code == 200
 	assert b"This account does not exist" in response.data
+
+def test_login_wrong_password(client):
+
+	#ARRANGE
+	password_hash = generate_password_hash("password123")
+	create_user("kira1", "kira1@gmail.com", password_hash)
+
+	#ACT
+	response = client.post(
+	"/login",
+	data = {
+	"user": "kira",
+	"password": "wrongpassword"	
+	}
+	)
+
+	#ASSERT
+	assert response.status_code == 302
+	assert response.headers["Location"] == "/"
+	
