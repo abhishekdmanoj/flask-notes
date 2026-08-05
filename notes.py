@@ -11,10 +11,14 @@ def get_notes(user_id):
 
 def create_note(note, user_id):
 
-	cursor.execute("INSERT INTO notes(note, user_id) VALUES (%s, %s)",
+	cursor.execute("INSERT INTO notes(note, user_id) VALUES (%s, %s) RETURNING id",
 	(note, user_id))
 
+	note_id = cursor.fetchone()[0]
+
 	conn.commit()
+
+	return note_id
 
 def fetch_note(id, user_id):
 
