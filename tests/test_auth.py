@@ -2,7 +2,7 @@ import pytest
 
 from app import create_app
 from config import TestingConfig
-from users import create_user, delete_user
+from users import create_user, delete_user, username_exists
 from notes import create_note, delete_note_db
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -128,3 +128,220 @@ def test_login_user(client):
 	assert response.status_code == 200
 	assert b"Welcome, pytest_user" in response.data
 	assert b"Add Note" in response.data
+
+def test_register_success(client):
+
+	#ARRANGE
+
+	username = "pytest_user"
+	email = "pytest_user@gmail.com"
+	password = "password123"
+
+	delete_user(username)	
+
+	#ACT
+
+	response = client.post("/register-user",
+	data = {
+	"username": username,
+	"email": email,
+	"password": password
+	},
+	follow_redirects = True
+	)
+
+	#ACT
+
+	assert response.status_code == 200
+	assert b"User created successfully" in response.data
+	assert username_exists(username)
+
+def test_register_username_exists(client):
+	
+	#ARRANGE
+
+	username = "pytest_user"
+	email = "pytest_user@gmail.com"
+	password = "password123"
+	password_hash = generate_password_hash(password)
+
+	delete_user(username)
+
+	create_user(username, email, password_hash)
+
+
+	#ACT
+
+	response = client.post("/register-user",
+	data = {
+	"username": username,
+	"email": "fasfsafsdfdsfsdfdsfwadadawsdsanoemail@gmail.com",
+	"password": password
+	},
+	follow_redirects = True
+	)
+
+	#ASSERT
+
+	assert response.status_code == 200
+	assert b"Username already exists" in response.data
+	assert b"Username" in response.data
+	assert b"Password" in response.data
+	assert b"Create User" in response.data
+
+def test_register_email_exists(client):
+
+
+	#ARRANGE
+
+	username = "pytest_user"
+	email = "pytest_user@gmail.com"
+	password = "password123"
+	password_hash = generate_password_hash(password)
+
+	delete_user(username)
+
+	create_user(username, email, password_hash)
+
+
+	#ACT
+
+	response = client.post("/register-user",
+	data = {
+	"username": "hahahhaahthisusernamewillneverexists7878787878767676",
+	"email": email,
+	"password": password
+	},
+	follow_redirects = True
+	)
+
+	#ASSERT
+
+	assert response.status_code == 200
+	assert b"email already exists" in response.data
+	assert b"Username" in response.data
+	assert b"Password" in response.data
+	assert b"Create User" in response.data
+
+def test_register_username_username_too_short(client):
+
+
+	#ARRANGE
+
+	username = "ab"
+	email = "pytest_user@gmail.com"
+	password = "password123"
+
+	#ACT
+
+	response = client.post("/register-user",
+	data = {
+	"username": username,
+	"email": email,
+	"password": password
+	},
+	follow_redirects = True
+	)
+
+	#ASSERT
+
+	assert response.status_code == 200
+	assert b"Username must be at least" in response.data
+	assert b"Username" in response.data
+	assert b"Password" in response.data
+	assert b"Create User" in response.data
+
+def test_register_password_too_short(client):
+
+
+	#ARRANGE
+
+	username = "pytest_user"
+	email = "pytest_user@gmail.com"
+	password = "koskfdo"
+	password_hash = generate_password_hash(password)
+
+	delete_user(username)
+
+	create_user(username, email, password_hash)
+
+
+	#ACT
+
+	response = client.post("/register-user",
+	data = {
+	"username": username,
+	"email": email,
+	"password": password
+	},
+	follow_redirects = True
+	)
+
+	#ASSERT
+
+	assert response.status_code == 200
+	assert b"Password must be at least" in response.data
+	assert b"Username" in response.data
+	assert b"Password" in response.data
+	assert b"Create User" in response.data
+
+def test_register_username_blank(client):
+
+	#ARRANGE
+
+	delete_user("pytest_user")
+
+	username = " "
+	email = "pytest_user@gmail.com"
+	password = "password123"
+	password_hash = generate_password_hash(password)
+
+	#ACT
+
+	response = client.post("/register-user",
+	data = {
+	"username": username,
+	"email": email,
+	"password": password
+	},
+	follow_redirects = True
+	)
+
+	#ASSERT
+
+	assert response.status_code == 200
+	assert b"Username is required" in response.data
+	assert b"Username" in response.data
+	assert b"Password" in response.data
+	assert b"Create User" in response.data
+
+
+def test_register_email_blank(client):
+
+	#ARRANGE
+
+	delete_user("pytest_user")
+
+	username = "pytest_user"
+	email = " "
+	password = "password123"
+	password_hash = generate_password_hash(password)
+
+	#ACT
+
+	response = client.post("/register-user",
+	data = {
+	"username": username,
+	"email": email,
+	"password": password
+	},
+	follow_redirects = True
+	)
+
+	#ASSERT
+
+	assert response.status_code == 200
+	assert b"Email is required" in response.data
+	assert b"Username" in response.data
+	assert b"Password" in response.data
+	assert b"Create User" in response.data

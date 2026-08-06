@@ -24,12 +24,16 @@ def register_user():
 	password = request.form["password"]
 
 
+	if not username.strip():
+		flash("Username is required.")
+		return redirect(url_for("auth.register"))
+
 	if len(username) < 3:
 		flash("Username must be at least 3 characters.")
 		return redirect(url_for("auth.register"))
-
-	if not username.strip():
-		flash("Username is required.")
+	
+	if not email.strip():
+		flash("Email is required.")
 		return redirect(url_for("auth.register"))
 
 	if len(password) < 8:
