@@ -1,0 +1,82 @@
+import pytest
+
+from app import create_app
+from config import TestingConfig
+from users import create_user, delete_user
+from notes import create_note, delete_note_db
+from werkzeug.security import generate_password_hash, check_password_hash
+
+@pytest.fixture
+def app():
+	return create_app(TestingConfig)
+
+@pytest.fixture
+def client(app):
+	return app.test_client()
+
+#def test_notes_page_logged_in(client):
+
+	#ARRANGE
+	
+	username = "pytest_user"
+	email = "pytest_user@gmail.com"
+	password = "password123"	
+
+	password_hash = generate_password_hash(password)
+
+	delete_user(username)
+
+	create_user(username, email, password_hash)
+
+	response = client.post("/login",
+	data = {
+	"user": username,
+	"password": password
+	},
+	follow_redirects = True
+	)
+	
+	assert response.status_code == 200
+	assert b"Nothing to see here. Scram!" in response.data 
+	assert b"Add Note" in response.data
+
+
+
+def test_edit_page_logged_in(client):
+
+	#ARRANGE
+
+	username = "pytest_user"
+	email = "pytest_user@gmail.com"
+	password = "password123"       	
+
+	password_hash = generate_password_hash(password)
+
+	delete_user(username)
+
+	create_user(username, email, password_hash)
+
+	client.post("/login",
+	data = {
+	"user": username,
+	"password": password
+	}
+	)
+
+	with client.session_transaction() as sess:
+		user_id = sess["user_id"]
+
+	note_id = create_note("Test Note lalalala", user_id)
+
+	#ACT
+
+	response = client.get(f"/edit/{note_id}")
+
+	#ASSERT
+
+	assert response.status_code == 200
+	assert b"Update" in response.data
+
+	#CLEANUP
+
+	delete_note_db(note_id, user_id)
