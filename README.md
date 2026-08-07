@@ -10,7 +10,7 @@ Honestly, it was much more fun and interesting than I thought it would be - who 
 - Secure password hashing
 - User login/logout
 - Session-based authentication
-- Full CRUD operations for notes
+- Full CRUD Operations for notes
 - PostgreSQL database
 - Flash messages
 - Automated integration testing with Pytest
@@ -92,7 +92,7 @@ Update the values in `.env` to match your PostgreSQL configuration and generate 
 
 ### Build the Flask image
 
-If your `compose.yaml` uses `image: flask-notes`, build the image first:
+Build the Flask image before starting the application:
 
 ```bash
 docker build -t flask-notes .
@@ -131,7 +131,7 @@ Apparently this section is a thing.
 
 Building this helped me gain experience with:
 
-- Docker and Docker compose
+- Docker and Docker Compose
 - Flask application architecture
 - PostgreSQL integration using psycopg2
 - Session based auth
