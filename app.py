@@ -1,10 +1,4 @@
-from flask import Flask, request, redirect, render_template, session, url_for, flash
-from helpers import login_required, isEmpty
-from werkzeug.security import generate_password_hash, check_password_hash
-import os
-from database import conn, cursor
-from users import username_exists, email_exists, create_user
-from notes import get_notes, create_note, fetch_note, update_note_db, delete_note_db
+from flask import Flask
 
 from routes_auth import auth
 from routes_notes import notes_bp
@@ -14,7 +8,7 @@ def create_app(config_class=Config):
 
 	app = Flask(__name__)
 
-	app.config.from_object(Config)
+	app.config.from_object(config_class)
 
 	app.register_blueprint(auth)
 

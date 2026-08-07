@@ -22,8 +22,6 @@ def notes():
 @notes_bp.route("/add-note", methods=["POST"])
 @login_required
 def add_note():
-
-	print("ADD NOTE ROUTE HIT")
 	
 	note = request.form["note"]
 

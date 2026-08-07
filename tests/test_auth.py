@@ -57,7 +57,6 @@ def test_login_no_user(client):
 	)
 
 	assert response.status_code == 302
-	print(response.headers["Location"])
 	assert response.headers["Location"] == "/"
 
 
