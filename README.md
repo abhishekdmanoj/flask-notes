@@ -1,64 +1,86 @@
 # Flask Notes
 
-Its a Dockerized notes application made using Flask with user authentication and PostgreSQL - my first attempt at a fully containerized application using multiple containers.
+It's a Dockerized notes application made using Flask with user authentication, PostgreSQL, automated testing with Pytest, and Continuous Integration using GitHub Actions - my first attempt at a fully containerized application using multiple containers with real world utility.
 
 Honestly, it was much more fun and interesting than I thought it would be - who would've thought it? Real world projects are much more fun than disappearing down the LeetCode rabbit hole. xd
 
 # Features
 
 - User registration
-- Fully secure password hashing
-- User login and logout
-- Session based auth
-- CRUD operations for notes
-- PostgreSQL as database
-- Flash messages for clarity of operations
+- Secure password hashing
+- User login/logout
+- Session-based authentication
+- Full CRUD operations for notes
+- PostgreSQL database
+- Flash messages
+- Automated integration testing with Pytest
+- Continuous Integration using GitHub Actions
 - Fully Dockerized using Docker Compose
-- Environment variable configuration for security
+- Environment variable configuration
 
 # Tech Stack
 
-| Technology | Purpose |
-|------------|---------|
-| Python | Programming language |
-| Flask | Web framework |
-| PostgreSQL | Database |
-| Docker | Containerization |
-| Docker Compose | Multi-container orchestration |
-| HTML | Frontend templates |
+# Tech Stack
+
+| Technology     | Purpose                                |
+| -------------- | -------------------------------------- |
+| Python         | Programming language                   |
+| Flask          | Backend web framework                  |
+| PostgreSQL     | Relational database                    |
+| Docker         | Containerization                       |
+| Docker Compose | Multi-container orchestration          |
+| Pytest         | Automated integration testing          |
+| GitHub Actions | Continuous Integration (CI)            |
+| AWS EC2        | Development and deployment environment |
+| HTML           | Frontend templates                     |
+| CSS            | Application styling                    |
+| Werkzeug       | Password hashing and authentication    |
 
 # Structure
 
+# Structure
+
+```text
 flask-notes/
 │
 ├── app.py
+├── config.py
 ├── database.py
 ├── helpers.py
 ├── notes.py
 ├── users.py
+├── routes_auth.py
+├── routes_notes.py
 │
 ├── templates/
 ├── static/
+├── tests/
+│
+├── .github/
+│   └── workflows/
+│       └── ci.yml
 │
 ├── Dockerfile
 ├── compose.yaml
 ├── requirements.txt
 ├── .env.example
+├── .gitignore
 └── README.md
+```
 
 # HOW TO USE
 
 ## Getting Started
-
 ### Prerequisites
 
+- Git
 - Docker
 - Docker Compose
 
 ### Clone the repository
 
 ```bash
-git clone https://github.com/<your-username>/flask-notes.git
+git clone https://github.com/abhishekdmanoj/flask-notes.git
 cd flask-notes
 ```
 
@@ -85,7 +107,6 @@ docker build -t flask-notes .
 ```bash
 docker compose up
 ```
-
 ### Access the application
 
 Open your browser and navigate to:
@@ -94,7 +115,15 @@ Open your browser and navigate to:
 http://localhost:5000
 ```
 
-To stop the application:
+### Running the tests
+
+With the application running, execute:
+
+```bash
+docker compose exec flask pytest
+```
+
+### To stop the application
 
 ```bash
 docker compose down
@@ -102,11 +131,11 @@ docker compose down
 
 # What I Learned
 
-Apparently its a thing.
+Apparently this section is a thing.
 
 Building this helped me gain experience with:
 
-- Docker and Docker commpose
+- Docker and Docker compose
 - Flask application architecture
 - PostgreSQL integration using psycopg2
 - Session based auth
@@ -123,8 +152,7 @@ Building this helped me gain experience with:
 - Convert the backend into a REST API
 - Build a React frontend
 - JWT authentication
-- Automated testing
-- CI/CD with GitHub Actions
+- Continuous Deployment using GitHub Actions
 - Deploy using Gunicorn and Nginx
 
 ## License
