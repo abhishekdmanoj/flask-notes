@@ -20,8 +20,6 @@ Honestly, it was much more fun and interesting than I thought it would be - who 
 
 # Tech Stack
 
-# Tech Stack
-
 | Technology     | Purpose                                |
 | -------------- | -------------------------------------- |
 | Python         | Programming language                   |
@@ -35,8 +33,6 @@ Honestly, it was much more fun and interesting than I thought it would be - who 
 | HTML           | Frontend templates                     |
 | CSS            | Application styling                    |
 | Werkzeug       | Password hashing and authentication    |
-
-# Structure
 
 # Structure
 
