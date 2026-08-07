@@ -48,7 +48,7 @@ def add_note():
 def edit_note(id):
 
 	note = fetch_note(id, session["user_id"])	
-	
+
 	if note is None:
 		return "Not Found", 404
 
@@ -60,6 +60,12 @@ def edit_note(id):
 def update_note(id):
 	
 	note = request.form["note"]
+
+
+	if isEmpty(note):
+
+		flash("The note cannot be blank.")
+		return redirect(url_for(f"notes_bp.edit_note", id = id)) 
 
 	try:
 
@@ -74,7 +80,7 @@ def update_note(id):
 		flash("Unable to update note.")
 		return redirect(url_for("notes_bp.edit_note", id = id))
 
-@notes_bp.route("/delete/<int:id>")
+@notes_bp.route("/delete/<int:id>", methods = ["POST"])
 @login_required
 def delete_note(id):
 	
@@ -89,3 +95,4 @@ def delete_note(id):
 		print(f"Failed to delete note: {e}")
 		flash("Failed to delete note.")
 		return redirect(url_for("notes_bp.notes", id=id))
+

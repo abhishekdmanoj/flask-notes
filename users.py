@@ -30,3 +30,11 @@ def delete_user(username):
 	cursor.execute("DELETE FROM users where username = %s", (username, ))
 
 	conn.commit()
+
+def get_user_id(username):
+
+	cursor.execute(
+	"SELECT id FROM users WHERE username = %s", (username, )
+	)
+
+	return cursor.fetchone()[0]

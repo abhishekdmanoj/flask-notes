@@ -36,3 +36,13 @@ def delete_note_db(id, user_id):
 
 	cursor.execute("DELETE FROM notes WHERE id = %s AND user_id = %s", (id, user_id))
 	conn.commit()
+
+
+def delete_notes(user_id):
+
+	cursor.execute(
+	"DELETE FROM notes WHERE user_id = %s",
+	(user_id,)
+	)
+
+	conn.commit()
