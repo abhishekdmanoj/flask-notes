@@ -34,6 +34,9 @@ jobs:
             sleep 1
           done
           echo "Flask is Responding!"
+
+      - name: Run Tests
+        run: docker compose exec -T flask pytest -v -s .
           
       - name: Stop Containers
         if: always()
