@@ -90,12 +90,12 @@ cp .env.example .env
 
 Update the values in `.env` to match your PostgreSQL configuration and generate a secure `SECRET_KEY`.
 
-### Build the Flask image
+### Build the Flask image locally
 
 Build the Flask image before starting the application:
 
 ```bash
-docker build -t flask-notes .
+docker build -t flask-notes:v4 .
 ```
 
 ### Start the application
