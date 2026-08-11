@@ -67,6 +67,13 @@ jobs:
             docker compose pull
             docker compose up -d
 
+            until curl -f http://localhost:5000; do
+              echo "Waiting for Flask..."
+              sleep 2
+            done
+
+            echo "Production deployement successful."
+
       - name: Stop Containers
         if: always()
         run: docker compose down
