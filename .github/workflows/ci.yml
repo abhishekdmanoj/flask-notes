@@ -55,15 +55,17 @@ jobs:
       - name: Push Docker Image
         run: docker push ghcr.io/abhishekdmanoj/flask-notes:${{ github.sha }}
 
-      - name: Test SSH connection
+      - name: Deploy to EC2
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.FLASK_NOTES_DEPLOY_KEY }}
           script: |
-            echo "SSH connection successful"
-            hostname
+            cd ~/flask-notes
+            sed -i "s/^IMAGE_TAG=.*/IMAGE_TAG=${{ github.sha }}/" .env
+            docker compose pull
+            docker compose up -d
 
       - name: Stop Containers
         if: always()
