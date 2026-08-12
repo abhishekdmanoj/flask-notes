@@ -1,0 +1,33 @@
+name: Rollback Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "GHCR image SHA to deploy"
+        required: true
+        type: string
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+
+  steps:
+    - name: Rollback Production
+      uses: appleboy/ssh-action@v1
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ec2-user
+        key: ${{ secrets.FLASK_NOTES_DEPLOY_KEY }}
+        script: |
+          cd ~/flask-notes
+          sed -i "s/^IMAGE_TAG=.*/IMAGE_TAG=${{ inputs.image_tag }}/" .env
+          docker compose pull
+          docker compose up -d
+
+          until curl -f http://localhost:5000; do
+            echo "Waiting for Flask..."
+            sleep 2
+          done
+
+          echo "Rollback successful."
